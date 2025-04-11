@@ -34,7 +34,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Future<User> getUsers = UserRepository(client: Client()).fetchUser();
+  late Future<User> getUsers;
+
+  @override
+  void initState() {
+    super.initState();
+    getUsers = UserRepository(client: Client()).fetchUser();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
         future: getUsers,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
           return Center(child: Text(snapshot.data!.name));

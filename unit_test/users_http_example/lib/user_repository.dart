@@ -8,14 +8,20 @@ class UserRepository {
   UserRepository({required this.client});
 
   Future<User> fetchUser() async {
-    final response = await client.get(
-      Uri.parse('https://jsonplaceholder.typicode.com/users/1'),
-    );
+    try {
+      final response = await client.get(
+        Uri.parse('https://jsonplaceholder.typicode.com/users/1'),
+      );
 
-    if (response.statusCode == 200) {
-      return User.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception('Failed to load user');
-    }
+      if (response.statusCode == 200) {
+        final user = User.fromJson(jsonDecode(response.body));
+
+        return user;
+      } else {
+        throw Exception('Failed to load user');
+      }
+    } catch (e) {
+      rethrow;
+    } finally {}
   }
 }
